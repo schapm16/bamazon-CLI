@@ -1,3 +1,6 @@
+// Note: I wrote this module using top to bottom function declarations to see if the top-down readability that
+// javascript hoisting allows for was worth it.  I don't like it... feels unnatural.
+
 module.exports = function customerModule(pool, connection, redirectToMain) {
   //npm packages required by customerModule
   var inquirer = require('inquirer');
@@ -8,9 +11,9 @@ module.exports = function customerModule(pool, connection, redirectToMain) {
   //>>>> Function Declarations <<<<
 
   function displayProductList() {
+    
     connection.query('SELECT item_id AS `Catalog Number`, product_name AS `Catalog Description`, price as Price FROM products WHERE stock_quantity > 0', function(err, results) {
       if (err) throw err;
-
 
       var availableItems = [];
 
@@ -74,6 +77,7 @@ module.exports = function customerModule(pool, connection, redirectToMain) {
   }
 
   function updateDatabase(orderQuantity, itemId) {
+    
     connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [orderQuantity, itemId], function(err) {
       if (err) throw err;
     });
@@ -84,7 +88,7 @@ module.exports = function customerModule(pool, connection, redirectToMain) {
     inquirer.prompt([{
       type: 'list',
       name: 'redirect',
-      message: 'Do you wish to return to the main screen, remain here or end your session?',
+      message: 'Do you wish to place another order, return to the main screen or end your session?',
       choices: [{
           name: 'Remain here',
           value: 'remain'
